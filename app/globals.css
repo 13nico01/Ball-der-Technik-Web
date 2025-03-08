@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Pirata+One&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-oswald: "Oswald", sans-serif;
+  --font-pirata: "Pirata One", serif;
+
+  --color-primary: #ff00ff;
+  --color-header: #eaba5f;
+
+  --text-big: 12rem;
+  --text-extra-big: 20rem;
+}
+
+:root{
+  color: white;
+  font-family: var(--font-oswald);
+  background-color: black;
+}
+
+body{
+  scroll-behavior: smooth;
+}
