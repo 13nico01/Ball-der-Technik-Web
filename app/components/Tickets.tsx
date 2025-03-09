@@ -190,7 +190,7 @@ const Tickets = () => {
             <div className="p-4 rounded-xl border-2 border-header/30 backdrop-blur-sm bg-black/30">
               <p className="font-roboto text-sm text-white/80 italic">
                 * Tickets sind limitiert. Der Verkauf erfolgt nach dem First-Come-First-Serve Prinzip.
-                Ermäßigte Tickets sind nur mit gültigem Nachweis erhältlich.
+                Ermäßigte Tickets sind nur mit gültigem Nachweis erhältlich.<br/>Einlass ist nur bis 22:30 möglich.
               </p>
             </div>
           </motion.div>
