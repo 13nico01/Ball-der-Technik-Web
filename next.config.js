@@ -58,7 +58,7 @@ const nextConfig = {
   },
   poweredByHeader: false,
   compress: true,
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   env: {
     NEXT_PUBLIC_SITE_URL: process.env.URL || 'http://localhost:3000',
@@ -85,6 +85,7 @@ const nextConfig = {
 
     return config
   },
+  output: 'standalone',
 }
 
 module.exports = nextConfig 
