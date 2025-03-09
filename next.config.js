@@ -58,7 +58,7 @@ const nextConfig = {
   },
   poweredByHeader: false,
   compress: true,
-  reactStrictMode: false,
+  reactStrictMode: true,
   swcMinify: true,
   env: {
     NEXT_PUBLIC_SITE_URL: process.env.URL || 'http://localhost:3000',
@@ -72,18 +72,6 @@ const nextConfig = {
   onDemandEntries: {
     maxInactiveAge: 60 * 60 * 1000,
     pagesBufferLength: 2,
-  },
-  webpack: (config, { dev, isServer }) => {
-    if (!dev && !isServer) {
-      Object.assign(config.resolve.alias, {
-        'react/jsx-runtime': 'preact/compat/jsx-runtime',
-        react: 'preact/compat',
-        'react-dom/test-utils': 'preact/test-utils',
-        'react-dom': 'preact/compat',
-      })
-    }
-
-    return config
   },
   output: 'standalone',
 }
