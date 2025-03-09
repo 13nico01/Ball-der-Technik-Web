@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useCallback, memo } from 'react'
+import { useState, useEffect, useCallback, memo, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { throttle } from 'lodash'
 
 const NavLink = memo(({ 
   item, 
@@ -41,13 +42,13 @@ const MobileNavLink = memo(({
     onClick={(e) => onClick(e, item.href)}
     className={`block px-3 py-2 rounded-md font-oswald text-lg uppercase tracking-wider transition-all duration-300 cursor-pointer
       ${isActive 
-        ? 'text-[#ff00ff] bg-black/50' 
-        : 'text-[#eaba5f] hover:text-[#ff00ff] hover:bg-black/30'}`}
+        ? 'text-white bg-black/50' 
+        : 'text-[#eaba5f] hover:text-white hover:bg-black/30'}`}
   >
     <span className="relative">
       {item.label}
       <span className={`absolute bottom-0 left-0 w-full h-0.5 transform origin-left transition-transform duration-300
-        ${isActive ? 'bg-[#ff00ff] scale-x-100' : 'bg-[#eaba5f] scale-x-0'}`} />
+        ${isActive ? 'bg-white scale-x-100' : 'bg-[#eaba5f] scale-x-0'}`} />
     </span>
   </a>
 ))
@@ -58,7 +59,7 @@ const navItems = [
   { label: 'Home', href: '#hero' },
   { label: 'Hardfacts', href: '#facts' },
   { label: 'Tickets', href: '#tickets' },
-  { label: 'Bilder', href: '#images' },
+  { label: 'Impressionen', href: '#images' },
   { label: 'FAQ', href: '#faq' },
 ] as const
 
@@ -66,24 +67,40 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('')
   const [scrolled, setScrolled] = useState(false)
+  const lastScrollY = useRef(0)
 
-  const handleScroll = useCallback(() => {
-    setScrolled(window.scrollY > 20)
+  const handleScroll = useCallback(
+    throttle(() => {
+      const currentScrollY = window.scrollY
+      
+      if (Math.abs(currentScrollY - lastScrollY.current) > 10) {
+        setScrolled(currentScrollY > 20)
+        lastScrollY.current = currentScrollY
 
-    const sections = navItems.map(item => item.href.substring(1))
-    const current = sections.find(section => {
-      const element = document.getElementById(section)
-      if (element) {
-        const rect = element.getBoundingClientRect()
-        return rect.top <= 100 && rect.bottom >= 100
+        const sections = navItems.map(item => item.href.substring(1))
+        let newActiveSection = ''
+        
+        for (const section of sections) {
+          const element = document.getElementById(section)
+          if (element) {
+            const rect = element.getBoundingClientRect()
+            if (rect.top <= 100 && rect.bottom >= 100) {
+              newActiveSection = section
+              break
+            }
+          }
+        }
+        
+        if (newActiveSection !== activeSection) {
+          setActiveSection(newActiveSection)
+        }
       }
-      return false
-    })
-    if (current) setActiveSection(current)
-  }, [])
+    }, 100),
+    [activeSection]
+  )
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [handleScroll])
 
@@ -152,24 +169,23 @@ const Navbar = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="relative inline-flex items-center justify-center p-2 rounded-md text-[#eaba5f] hover:text-[#ff00ff] focus:outline-none transition-colors duration-300 group"
+              className="relative inline-flex items-center justify-center p-2 rounded-md text-[#eaba5f] hover:text-white focus:outline-none transition-colors duration-300 group"
               aria-expanded={isMenuOpen}
             >
               <span className="sr-only">Toggle menu</span>
               <div className="relative w-8 h-8">
                 <span className={`absolute left-1/2 top-1/2 block w-6 h-0.5 -translate-x-1/2 transform transition-all duration-300
-                  ${isMenuOpen ? 'rotate-45 bg-[#ff00ff]' : '-translate-y-2 bg-[#eaba5f] group-hover:bg-[#ff00ff]'}`} />
+                  ${isMenuOpen ? 'rotate-45 bg-white' : '-translate-y-2 bg-[#eaba5f] group-hover:bg-white'}`} />
                 <span className={`absolute left-1/2 top-1/2 block w-6 h-0.5 -translate-x-1/2 transform transition-all duration-300
                   ${isMenuOpen ? 'opacity-0' : 'bg-[#eaba5f] group-hover:bg-[#ff00ff]'}`} />
                 <span className={`absolute left-1/2 top-1/2 block w-6 h-0.5 -translate-x-1/2 transform transition-all duration-300
-                  ${isMenuOpen ? '-rotate-45 bg-[#ff00ff]' : 'translate-y-2 bg-[#eaba5f] group-hover:bg-[#ff00ff]'}`} />
+                  ${isMenuOpen ? '-rotate-45 bg-white' : 'translate-y-2 bg-[#eaba5f] group-hover:bg-white'}`} />
               </div>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
       <div 
         className={`md:hidden fixed inset-x-0 top-20 transition-all duration-300 ease-in-out transform 
           ${isMenuOpen 

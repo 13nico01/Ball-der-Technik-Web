@@ -1,13 +1,27 @@
 import type { Metadata, Viewport } from 'next'
 import { Oswald, Roboto } from 'next/font/google'
+import localFont from 'next/font/local'
+import dynamic from 'next/dynamic'
 import './globals.css'
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 
+// Dynamically import components with loading fallback
+const Navbar = dynamic(() => import('./components/Navbar'), {
+  loading: () => <div className="h-20" />,
+  ssr: true,
+})
+
+const Footer = dynamic(() => import('./components/Footer'), {
+  ssr: true,
+})
+
+// Optimize fonts
 const oswald = Oswald({ 
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-oswald',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
+  adjustFontFallback: true,
 })
 
 const roboto = Roboto({ 
@@ -15,6 +29,17 @@ const roboto = Roboto({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-roboto',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
+  adjustFontFallback: true,
+})
+
+const pirata = localFont({
+  src: '../public/fonts/PirataOne-Regular.ttf',
+  display: 'swap',
+  variable: '--font-pirata',
+  preload: true,
+  fallback: ['Georgia', 'serif'],
 })
 
 export const viewport: Viewport = {
@@ -22,6 +47,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: '#eaba5f',
+  colorScheme: 'dark',
 }
 
 export const metadata: Metadata = {
@@ -42,6 +68,20 @@ export const metadata: Metadata = {
     title: 'Ball der Technik - HTL Hollabrunn',
     description: 'Der Ball der Technik der HTL Hollabrunn - Eine Nacht voller Eleganz und Innovation.',
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+  verification: {
+    google: 'google',
+    other: {
+      me: ['@nicozimmermann'],
+    },
+  },
 }
 
 export default function RootLayout({
@@ -50,10 +90,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="de" className={`${oswald.variable} ${roboto.variable}`}>
+    <html 
+      lang="de" 
+      className={`${oswald.variable} ${roboto.variable} ${pirata.variable}`}
+      suppressHydrationWarning
+    >
       <body className="text-white overflow-x-hidden">
         <Navbar />
-        {children}
+        <main className="min-h-screen">
+          {children}
+        </main>
         <Footer/>
       </body>
     </html>
