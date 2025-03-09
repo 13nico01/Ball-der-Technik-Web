@@ -4,7 +4,6 @@ import localFont from 'next/font/local'
 import dynamic from 'next/dynamic'
 import './globals.css'
 
-// Dynamically import components with loading fallback
 const Navbar = dynamic(() => import('./components/Navbar'), {
   loading: () => <div className="h-20" />,
   ssr: true,
@@ -14,7 +13,6 @@ const Footer = dynamic(() => import('./components/Footer'), {
   ssr: true,
 })
 
-// Optimize fonts
 const oswald = Oswald({ 
   subsets: ['latin'],
   display: 'swap',
@@ -51,13 +49,13 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: 'Ball der Technik - HTL Hollabrunn',
-  description: 'Der Ball der Technik der HTL Hollabrunn - Eine Nacht voller Eleganz und Innovation.',
+  title: 'Ball der Technik - Hollabrunn',
+  description: 'Der Ball der Technik der Schülervertretung der HTL Hollabrunn geht in die nächste Runde.',
   keywords: ['Ball der Technik', 'HTL Hollabrunn', 'Schulball', 'Technikball', 'Event', 'Tanzball'],
   authors: [{ name: 'Nico Zimmermann' }],
   openGraph: {
-    title: 'Ball der Technik - HTL Hollabrunn',
-    description: 'Der Ball der Technik der HTL Hollabrunn - Eine Nacht voller Eleganz und Innovation.',
+    title: 'Ball der Technik - Hollabrunn',
+    description: 'Der Ball der Technik der Schülervertretung der HTL Hollabrunn geht in die nächste Runde.',
     url: 'https://ball.htl-hl.ac.at',
     siteName: 'Ball der Technik',
     locale: 'de_AT',
@@ -65,8 +63,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ball der Technik - HTL Hollabrunn',
-    description: 'Der Ball der Technik der HTL Hollabrunn - Eine Nacht voller Eleganz und Innovation.',
+    title: 'Ball der Technik - Hollabrunn',
+    description: 'Der Ball der Technik der Schülervertretung der HTL Hollabrunn geht in die nächste Runde.',
   },
   robots: {
     index: true,
